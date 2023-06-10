@@ -1,13 +1,20 @@
-import os 
-import sys
+import os
 import json
 
 student = []
 
 file = open("student.txt", 'r').read().split("\n")
 
-for i in range(len(file)):
-    student.append(file[i])
+if '' in file:
+    file.remove('')
+else:
+    pass
+
+if len(file) == 0:
+    pass
+else:
+    for i in range(len(file)):
+        student.append(file[i])
 
 string = """
 
@@ -22,8 +29,11 @@ print(string)
 
 
 def NStudent(name):
-    open("student.txt", 'a').write('\n{}'.format(name))
-    student.append(name)
+    if len(student) == 0:
+        open("student.txt", 'a').write('{}'.format(name))
+    else:
+        open("student.txt", 'a').write('\n{}'.format(name))
+        student.append(name)
 
 def MStudent(name, mark):
     mark = int(mark)
@@ -37,14 +47,24 @@ def MStudent(name, mark):
             json.dump(data, jsonFile)
             jsonFile.truncate()
             jsonFile.close()
+    elif (name in student) == False:
+        print(f"The student `{name}` is not exist!")
+    else:
+        print("Unknown Error.")
 
 def PStudent():
-    for i in range(len(student)):
-        f = open('student.json', 'r')
-        data = f.read()
-        f.close()
-        std = json.loads( data )[student[i]]
-        print('{}:{}'.format(student[i], std))
+    if len(student) == 0:
+        print("No student found!")
+    else:
+        for i in range(len(student)):
+            f = open('student.json', 'r')
+            data = f.read()
+            f.close()
+            if student[i] in data:
+                std = json.loads( data )[student[i]]
+                print('{}:{}'.format(student[i], std))
+            else:
+                print(f'Student `{student[i]}` is not marked')
 
 while True:
     inp = int(input("Enter your choice: "))
@@ -56,6 +76,6 @@ while True:
     elif inp == 3:
         PStudent()
     elif inp == 4:
-        sys.exit()
+        exit()
     else:
         print("Your Choice is not valid")
